@@ -1,0 +1,36 @@
+
+
+services:
+  db:
+    image: postgres:alpine
+    container_name: task_manager_db
+    restart: always
+    environment:
+      POSTGRES_DB: task_manager_db
+      POSTGRES_USER: task_user
+      POSTGRES_PASSWORD: task_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  web:
+    build: .
+    container_name: django_app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+    volumes:
+      - .:/app
+
+
+volumes:
+  postgres_data:
+
+networks:
+  task_manager_network: 

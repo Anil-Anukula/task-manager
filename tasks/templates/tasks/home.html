@@ -1,0 +1,80 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="container">
+        <h2 class="text-center my-4">Welcome, {{ user.username }}</h2>
+
+        <div class="row">
+            <!-- Task List (Left Side) -->
+            <div class="col-md-8 task-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Your Tasks</h3>
+                    <a href="{% url 'task_create' %}" class="btn btn-primary">+ Create Task</a>
+                </div>
+
+                <ul class="list-group ">
+                    {% for task in tasks %}
+                        <li class="list-group-item bg-white text-dark d-flex justify-content-between align-items-center mt-2">
+                            <!-- Task Info -->
+                            <div class="d-flex flex-column">
+                                <p class="task-title">
+                                    {% if task.is_completed %}
+                                        ✅ <s>{{ task.title }}</s> 
+                                    {% else %}
+                                        {{ task.title }}
+                                    {% endif %}
+                                </p>
+                                <small class="text-muted">
+                                    Updated: {{ task.updated_at|date:"M d, Y H:i" }}
+                                </small>
+                                <small class="{% if task.due_date == today %}text-warning fw-bold
+                                               {% elif task.due_date < today %}text-danger fw-bold
+                                               {% else %}text-muted{% endif %}">
+                                    {% if task.due_date %}
+                                        Due Date: {{ task.due_date|date:"M d, Y" }}
+                                    {% endif %}
+                                </small>
+                            </div>
+
+                            <!-- Action Icons -->
+                            <div class="task-icons">
+                                <a href="{% url 'toggle_task' task.id %}" class="btn btn-sm bg-success text-white">
+                                    <i class="bi {% if task.is_completed %}bi-arrow-counterclockwise{% else %}bi-check-circle{% endif %}"></i>
+                                </a>
+                                <a href="{% url 'task_update' task.id %}" class="btn btn-sm bg-primary text-white">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'task_delete' task.id %}" class="btn btn-sm btn-danger text-white">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-center bg-white">No tasks available</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Sidebar (Right Side) -->
+             
+            <div class="col-md-3 offset-md-1 pt-3">
+                <div class="card mt-5">  <!-- Added mt-4 to move it down -->
+                    <div class="card-header text-center">
+                        <h5>Filter Tasks</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'home' %}?filter=all" class="btn w-100 mb-2 {% if filter_option == 'all' %}btn-primary{% else %}btn-outline-primary{% endif %}">All Tasks</a>
+                        <a href="{% url 'home' %}?filter=overdue" class="btn w-100 mb-2 {% if filter_option == 'overdue' %}btn-danger{% else %}btn-outline-danger{% endif %}">⏳ Overdue</a>
+                        <a href="{% url 'home' %}?filter=today" class="btn w-100 mb-2 {% if filter_option == 'today' %}btn-warning{% else %}btn-outline-warning{% endif %}">📅 Due Today</a>
+                        <a href="{% url 'home' %}?filter=pending" class="btn w-100 mb-2 {% if filter_option == 'pending' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">📝 Pending</a>
+                        <a href="{% url 'home' %}?filter=completed" class="btn w-100 {% if filter_option == 'completed' %}btn-success{% else %}btn-outline-success{% endif %}">✅ Completed</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Task Form{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh; padding: 80px;">
+    <div class="col-md-8">
+        <div class="card p-4 shadow-lg rounded">
+            <h2 class="text-center mb-4 text-primary">Task Form</h2>
+            <form method="post">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label fw-bold text-primary">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-success w-50">Save</button>
+                    <a href="{% url 'home' %}" class="btn btn-danger w-50">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Adjust input fields for full width */
+    input, textarea, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+  
+    .col-md-5 {
+        min-width: 450px;
+    }
+
+   
+    body {
+        /* Adjust this based on your navbar height */
+    }
+</style>
+
+{% endblock %}
