@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
-
+from django import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-l^g+n&hi&bd-7ii@+@pm8dm0kxzz@+jk_s$2k#p+*4#!c%ugrg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['task-manager.onrender.com']
-
+ALLOWED_HOSTS = ['task-manager.onrender.com', '.onrender.com', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://task-manager.onrender.com']
 
 # Application definition
 
@@ -76,17 +76,22 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('POSTGRES_DB', 'task_manager_db'),
+#         'USER': os.getenv('POSTGRES_USER', 'task_user'),
+#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'task_password'),
+#         'HOST': 'db',  # This should match the service name in docker-compose
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'task_manager_db'),
-        'USER': os.getenv('POSTGRES_USER', 'task_user'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'task_password'),
-        'HOST': 'db',  # This should match the service name in docker-compose
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('postgresql://task_manager_db_52xe_user:KqvXShkVdyGBrkypK2EgqLGfa5jPiF7b@dpg-cv26ir9u0jms738qo6ng-a.oregon-postgres.render.com/task_manager_db_52xe'),
+        conn_max_age=600
+    )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
