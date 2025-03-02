@@ -1,5 +1,3 @@
-
-
 services:
   db:
     image: postgres:alpine
@@ -8,12 +6,13 @@ services:
     environment:
       POSTGRES_DB: task_manager_db
       POSTGRES_USER: task_user
-      POSTGRES_PASSWORD: test1234
+      POSTGRES_PASSWORD: task_password
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+    networks:
+      - task_manager_network  # Ensure DB is in the network
 
   web:
     build: .
@@ -24,13 +23,20 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DEBUG=True
+      DATABASE_NAME: task_manager_db  
+      DATABASE_USER: task_user
+      DATABASE_PASSWORD: task_password
+      DATABASE_HOST: db  
+      DATABASE_PORT: 5432
+      DEBUG: "True"
     volumes:
       - .:/app
-
+    networks:
+      - task_manager_network  # Ensure Web is in the same network
 
 volumes:
   postgres_data:
 
 networks:
-  task_manager_network: 
+  task_manager_network:
+    driver: bridge  # Ensure containers communicate
