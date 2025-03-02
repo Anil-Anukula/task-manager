@@ -6,6 +6,5 @@ set -o errexit
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Run Django commands
+# Collect static files but skip migrations
 python manage.py collectstatic --no-input
-python manage.py migrate
