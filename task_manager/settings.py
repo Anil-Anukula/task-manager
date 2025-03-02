@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', 'task_manager_db'),
         'USER': os.getenv('POSTGRES_USER', 'task_user'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'task_password'),
-        'HOST': 'db',  # This should match the service name in docker-compose
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),  # This should match the service name in docker-compose
         'PORT': '5432',
     }
 }
@@ -134,3 +134,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'home'  # Redirect to home after login
 LOGOUT_REDIRECT_URL = 'login'  # Redirect to login after logout
+LOGIN_URL = 'login/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
