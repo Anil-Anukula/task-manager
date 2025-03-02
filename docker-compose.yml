@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:alpine
-    container_name: postgres_db
+    container_name: task_manager_db
     restart: always
     environment:
       POSTGRES_DB: task_manager_db
