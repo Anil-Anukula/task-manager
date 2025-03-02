@@ -11,8 +11,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - task_manager_network  # Ensure DB is in the network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U task_user -d task_manager_db"]
       interval: 10s
@@ -29,15 +29,13 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_HOST: db
       POSTGRES_DB: task_manager_db  
       POSTGRES_USER: task_user
       POSTGRES_PASSWORD: task_password
       DEBUG: "True"
     volumes:
       - .:/app
-    networks:
-      - task_manager_network  # Ensure Web is in the same network
+ # Ensure Web is in the same network
     extra_hosts:
       - "host.docker.internal:host-gateway"
 volumes:
