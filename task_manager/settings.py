@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', 'task_manager_db'),
         'USER': os.getenv('POSTGRES_USER', 'task_user'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'task_password'),
-        'HOST': 'localhost',  # This should match the service name in docker-compose
+        'HOST': 'db',  # This should match the service name in docker-compose
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
