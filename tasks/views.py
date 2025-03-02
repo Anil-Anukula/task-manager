@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 
+
+
 def register_view(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -47,11 +49,6 @@ def custom_logout_view(request):
     logout(request)
     return redirect('login')  # Redirect to login page
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from datetime import date
-from django.db.models import Count, Q
-from .models import List, Task
 
 @login_required
 def home(request):
